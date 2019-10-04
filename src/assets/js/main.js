@@ -1,3 +1,5 @@
+// import Swiper from 'swiper';
+
 let sum = (a, b) => {
   a + b;
 }

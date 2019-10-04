@@ -1,10 +1,12 @@
 'use strict';
 
 import { paths } from '../gulpfile.babel';
+import fs from 'fs';
 import gulp from 'gulp';
 import gulpif from 'gulp-if';
 import rename from 'gulp-rename';
 import postcss from 'gulp-postcss';
+import atImport from 'postcss-import';
 import cssnext from 'postcss-cssnext';
 import precss from 'precss';
 import cssnano from 'cssnano';
@@ -19,8 +21,12 @@ const argv = yargs.argv,
   production = !!argv.production;
 
 const processors = [
+  atImport(),
   cssnext,
-  precss
+  precss,
+  cssnano({
+    preset: 'default',
+  }),
 ];
 
 gulp.task('styles', () => {
@@ -35,11 +41,6 @@ gulp.task('styles', () => {
       })
     }))
     .pipe(postcss(processors))
-    .pipe(gulpif(production,
-      cssnano({
-        preset: 'default',
-      })
-    ))
     .pipe(gulpif(production, rename({
       suffix: '.min'
     })))
